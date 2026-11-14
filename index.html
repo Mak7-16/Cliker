@@ -2,6 +2,8 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#030d07">
     <title>Hamster Kombat — Десктопний Клікер</title>
     <!-- Підключення сучасного шрифту -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,22 +29,27 @@
                 radial-gradient(circle at 85% 85%, rgba(5, 150, 105, 0.12) 0%, transparent 45%),
                 linear-gradient(135deg, #030d07 0%, #061a10 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #ffffff;
             overflow-x: hidden;
-            padding: 20px;
+            padding: 0;
+            touch-action: manipulation;
+            overscroll-behavior: none;
+            -webkit-touch-callout: none;
         }
 
         /* Десктопний широкий ігровий центр (відповідає вимогам десктопу) */
         .app-frame {
-            width: 860px;
-            max-width: 95vw;
-            height: 720px;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
             background: linear-gradient(180deg, #0a1f14 0%, #05120a 100%);
-            border-radius: 32px;
-            border: 2px solid #059669;
+            border-radius: 0;
+            border: none;
+            padding-top: env(safe-area-inset-top, 0px);
             box-shadow: 
                 0 30px 80px rgba(0, 0, 0, 0.9),
                 0 0 50px rgba(16, 185, 129, 0.25),
@@ -55,14 +62,13 @@
 
         /* Верхній декоративний міні-чубчик */
         .phone-notch {
-            width: 160px;
-            height: 20px;
+            width: 100%;
+            height: 32px;
             background: #030d07;
             margin: 0 auto;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-            border: 1px solid #059669;
-            border-top: none;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid #059669;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -88,7 +94,8 @@
            ШАПКА ЗАСТОСУНКУ
            ========================================================================== */
         .app-header {
-            padding: 16px 28px 12px;
+            padding: 10px 14px 8px;
+            gap: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -101,7 +108,7 @@
             align-items: center;
             gap: 12px;
             background: rgba(16, 185, 129, 0.08);
-            padding: 8px 16px 8px 10px;
+            padding: 6px 10px 6px 8px;
             border-radius: 18px;
             border: 1px solid rgba(16, 185, 129, 0.25);
         }
@@ -140,7 +147,7 @@
         .profit-pill {
             background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(4, 120, 87, 0.3));
             border: 1px solid rgba(52, 211, 153, 0.4);
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 16px;
             text-align: right;
         }
@@ -163,7 +170,7 @@
            БЛОК БАЛАНСУ
            ========================================================================== */
         .balance-section {
-            padding: 12px 28px 16px;
+            padding: 8px 14px 10px;
             text-align: center;
             flex-shrink: 0;
         }
@@ -185,7 +192,7 @@
         }
 
         .balance-icon {
-            font-size: 40px;
+            font-size: 28px;
             filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.7));
             animation: floatIcon 3s ease-in-out infinite;
         }
@@ -196,7 +203,7 @@
         }
 
         .balance-number {
-            font-size: 46px;
+            font-size: 34px;
             font-weight: 900;
             letter-spacing: -1px;
             background: linear-gradient(180deg, #ffffff 20%, #a7f3d0 100%);
@@ -220,7 +227,7 @@
             display: none;
             flex: 1;
             flex-direction: column;
-            padding: 0 28px 16px;
+            padding: 0 14px 12px;
             overflow-y: auto;
             animation: fadeInScreen 0.25s ease-out;
         }
@@ -259,11 +266,13 @@
         }
 
         .coin-outer-ring {
-            width: 310px;
-            height: 310px;
+            --coin: min(74vw, 42vh, 310px);
+            --coin: min(74vw, 42dvh, 310px);
+            width: var(--coin);
+            height: var(--coin);
             border-radius: 50%;
             background: linear-gradient(145deg, #064e3b, #022c22);
-            padding: 16px;
+            padding: 12px;
             box-shadow: 
                 0 0 60px rgba(16, 185, 129, 0.35),
                 inset 0 2px 5px rgba(255, 255, 255, 0.2),
@@ -317,8 +326,8 @@
         }
 
         .hamster-svg-box {
-            width: 225px;
-            height: 225px;
+            width: calc(var(--coin) * 0.725);
+            height: calc(var(--coin) * 0.725);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -328,7 +337,7 @@
         }
 
         .skin-caption {
-            margin-top: 22px;
+            margin-top: 16px;
             background: rgba(16, 185, 129, 0.08);
             border: 1px solid rgba(16, 185, 129, 0.25);
             padding: 8px 20px;
@@ -347,7 +356,7 @@
 
         .floating-plus {
             position: fixed;
-            font-size: 30px;
+            font-size: 26px;
             font-weight: 900;
             color: #ffffff;
             text-shadow: 
@@ -389,6 +398,7 @@
            КНОПКА СКИДАННЯ АКАУНТА
            ========================================================================== */
         .btn-reset {
+            display: none;
             background: rgba(239, 68, 68, 0.12);
             border: 1px solid rgba(239, 68, 68, 0.5);
             color: #fca5a5;
@@ -410,6 +420,109 @@
         }
 
         /* ==========================================================================
+           ГОЛОВНЕ МЕНЮ
+           ========================================================================== */
+        .menu-open-btn {
+            position: absolute;
+            top: calc(4px + env(safe-area-inset-top, 0px));
+            left: 14px;
+            z-index: 800;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(52, 211, 153, 0.5);
+            color: #a7f3d0;
+            padding: 3px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .menu-open-btn:hover { background: rgba(16, 185, 129, 0.3); }
+        .menu-open-btn:active { transform: scale(0.95); }
+
+        .menu-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 900;
+            background: radial-gradient(circle at 50% 30%, rgba(6, 78, 59, 0.97) 0%, rgba(3, 13, 7, 0.98) 70%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            overflow-y: auto;
+            justify-content: safe center;
+            animation: fadeInScreen 0.25s ease-out;
+        }
+
+        .menu-overlay.open { display: flex; }
+
+        .menu-logo {
+            width: 96px;
+            height: 96px;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.6));
+        }
+
+        .menu-title {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: linear-gradient(180deg, #ffffff 20%, #a7f3d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-balance {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6ee7b7;
+            margin-bottom: 14px;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: min(300px, 100%);
+        }
+
+        .menu-btn {
+            padding: 13px 18px;
+            border-radius: 16px;
+            border: 1.5px solid #065f46;
+            background: #0a2617;
+            color: #f8fafc;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover { border-color: #34d399; background: rgba(16, 185, 129, 0.2); }
+        .menu-btn:active { transform: scale(0.97); }
+
+        .menu-btn.primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #34d399;
+            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+            font-size: 16px;
+        }
+
+        .menu-btn.danger {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+
+        .menu-btn.danger.confirm {
+            background: #dc2626;
+            border-color: #fecaca;
+            color: #ffffff;
+        }
+
+        /* ==========================================================================
            ЗАГОЛОВКИ РОЗДІЛІВ
            ========================================================================== */
         .section-header {
@@ -420,7 +533,7 @@
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             color: #f8fafc;
         }
@@ -436,8 +549,8 @@
            ========================================================================== */
         .skins-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             padding-bottom: 12px;
         }
 
@@ -529,8 +642,8 @@
            ========================================================================== */
         .currency-types-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -622,10 +735,10 @@
         .bottom-nav {
             background: #05160d;
             border-top: 1px solid #065f46;
-            padding: 12px 20px 16px;
+            padding: 8px 8px calc(10px + env(safe-area-inset-bottom, 0px));
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            gap: 6px;
             flex-shrink: 0;
         }
 
@@ -633,7 +746,7 @@
             background: transparent;
             border: 1px solid transparent;
             border-radius: 16px;
-            padding: 10px 8px;
+            padding: 8px 2px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -652,16 +765,16 @@
             color: #34d399;
         }
 
-        .nav-icon { font-size: 22px; line-height: 1; }
+        .nav-icon { font-size: 20px; line-height: 1; }
 
-        .nav-label { font-size: 12px; font-weight: 800; }
+        .nav-label { font-size: 11px; font-weight: 800; text-align: center; }
 
         /* ==========================================================================
            TOAST ПОВІДОМЛЕННЯ
            ========================================================================== */
         .toast-banner {
             position: absolute;
-            top: 40px;
+            top: calc(40px + env(safe-area-inset-top, 0px));
             left: 50%;
             transform: translateX(-50%) translateY(-20px);
             background: #064e3b;
@@ -676,12 +789,79 @@
             pointer-events: none;
             transition: all 0.25s ease;
             z-index: 1000;
-            white-space: nowrap;
+            white-space: normal;
+            text-align: center;
+            width: max-content;
+            max-width: 92%;
         }
 
         .toast-banner.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+        }
+
+        /* ==========================================================================
+           MOBILE-FIRST: ПОСТУПОВЕ РОЗШИРЕННЯ ДЛЯ БІЛЬШИХ ЕКРАНІВ
+           ========================================================================== */
+        @media (min-width: 480px) {
+            .skins-grid,
+            .currency-types-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+
+            .app-frame {
+                width: 860px;
+                max-width: 95vw;
+                height: 720px;
+                height: min(720px, 96dvh);
+                border-radius: 32px;
+                border: 2px solid #059669;
+                padding-top: 0;
+            }
+
+            .phone-notch {
+                width: 160px;
+                height: 20px;
+                border-radius: 0 0 12px 12px;
+                border: 1px solid #059669;
+                border-top: none;
+            }
+
+            .menu-open-btn { top: 3px; }
+            .toast-banner { top: 40px; }
+
+            .app-header { padding: 16px 28px 12px; gap: 12px; }
+            .player-badge { padding: 8px 16px 8px 10px; }
+            .profit-pill { padding: 8px 16px; }
+            .btn-reset { display: block; }
+
+            .balance-section { padding: 12px 28px 16px; }
+            .balance-icon { font-size: 40px; }
+            .balance-number { font-size: 46px; }
+
+            .screen { padding: 0 28px 16px; }
+
+            .coin-outer-ring { --coin: 310px; padding: 16px; }
+            .skin-caption { margin-top: 22px; }
+            .floating-plus { font-size: 30px; }
+            .section-title { font-size: 18px; }
+
+            .skins-grid { gap: 14px; }
+            .currency-types-grid { gap: 12px; }
+
+            .bottom-nav { padding: 12px 20px 16px; gap: 12px; }
+            .nav-item { padding: 10px 8px; }
+            .nav-icon { font-size: 22px; }
+            .nav-label { font-size: 12px; }
+
+            .menu-overlay { padding: 0; gap: 10px; }
+            .menu-logo { width: 130px; height: 130px; }
+            .menu-title { font-size: 34px; }
+            .menu-buttons { width: 280px; }
         }
     </style>
 </head>
@@ -693,6 +873,23 @@
         <div class="phone-notch">
             <div class="notch-speaker"></div>
             <div class="notch-camera"></div>
+        </div>
+
+        <!-- Кнопка відкриття меню -->
+        <button class="menu-open-btn" id="menuOpenBtn">☰ Меню</button>
+
+        <!-- Головне меню -->
+        <div class="menu-overlay open" id="menuOverlay">
+            <div class="menu-logo" id="menuLogo"></div>
+            <div class="menu-title">Hamster Kombat</div>
+            <div class="menu-balance" id="menuBalance">Баланс: 0</div>
+            <div class="menu-buttons">
+                <button class="menu-btn primary" id="menuPlayBtn">▶ Грати</button>
+                <button class="menu-btn" data-go="skins">👕 Скіни</button>
+                <button class="menu-btn" data-go="currency">💶 Валюта</button>
+                <button class="menu-btn" data-go="leaders">🏆 Лідери</button>
+                <button class="menu-btn danger" id="menuResetBtn">🔄 Нова гра з нуля</button>
+            </div>
         </div>
 
         <!-- Сповіщення -->
@@ -1299,6 +1496,72 @@
             });
         }
 
+        /* ==========================================================================
+           ГОЛОВНЕ МЕНЮ
+           ========================================================================== */
+        function setupMenu() {
+            const overlay = document.getElementById('menuOverlay');
+            const resetBtn = document.getElementById('menuResetBtn');
+            const resetText = '🔄 Нова гра з нуля';
+            let confirmTimeout = null;
+
+            function cancelConfirm() {
+                resetBtn.classList.remove('confirm');
+                resetBtn.textContent = resetText;
+            }
+
+            function openMenu() {
+                const currency = getCurrentCurrency();
+                document.getElementById('menuLogo').innerHTML = HAMSTER_SVGS[getCurrentSkin().id] || HAMSTER_SVGS.classic;
+                document.getElementById('menuBalance').textContent =
+                    `Баланс: ${gameState.balance.toLocaleString('uk-UA')} ${currency.icon}`;
+                cancelConfirm();
+                overlay.classList.add('open');
+            }
+
+            function closeMenu() {
+                overlay.classList.remove('open');
+            }
+
+            document.getElementById('menuOpenBtn').addEventListener('click', openMenu);
+            document.getElementById('menuPlayBtn').addEventListener('click', () => {
+                document.querySelector('.nav-item[data-tab="clicker"]').click();
+                closeMenu();
+            });
+
+            overlay.querySelectorAll('[data-go]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelector(`.nav-item[data-tab="${btn.dataset.go}"]`).click();
+                    closeMenu();
+                });
+            });
+
+            resetBtn.addEventListener('click', () => {
+                if (!resetBtn.classList.contains('confirm')) {
+                    resetBtn.classList.add('confirm');
+                    resetBtn.textContent = '⚠️ Точно? Натисни ще раз';
+                    clearTimeout(confirmTimeout);
+                    confirmTimeout = setTimeout(cancelConfirm, 3000);
+                    return;
+                }
+                clearTimeout(confirmTimeout);
+
+                gameState = {
+                    balance: 0,
+                    ownedSkins: ['classic'],
+                    selectedSkin: 'classic',
+                    selectedCurrency: 'uah'
+                };
+                clickCounter = 0;
+                saveGameState();
+                renderAll();
+                openMenu();
+                showToast('🔄 Акаунт скинуто! Починаємо з нуля');
+            });
+
+            openMenu();
+        }
+
         function setupNavigation() {
             const navButtons = document.querySelectorAll('.nav-item');
             const screens = document.querySelectorAll('.screen');
@@ -1327,6 +1590,7 @@
             setupClickerInteraction();
             setupResetButton();
             setupNavigation();
+            setupMenu();
         });
     </script>
 </body>
