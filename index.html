@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Hamster Kombat — Десктопний Клікер</title>
+    <!-- Підключення сучасного шрифту -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           ЗЕЛЕНИЙ КІБЕР-ТЕМОПІЛ (ДЕСКТОПНА ВЕРСТКА)
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: #030d07;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(5, 150, 105, 0.12) 0%, transparent 45%),
+                linear-gradient(135deg, #030d07 0%, #061a10 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Десктопний широкий ігровий центр (відповідає вимогам десктопу) */
+        .app-frame {
+            width: 860px;
+            max-width: 95vw;
+            height: 720px;
+            background: linear-gradient(180deg, #0a1f14 0%, #05120a 100%);
+            border-radius: 32px;
+            border: 2px solid #059669;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.9),
+                0 0 50px rgba(16, 185, 129, 0.25),
+                inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Верхній декоративний міні-чубчик */
+        .phone-notch {
+            width: 160px;
+            height: 20px;
+            background: #030d07;
+            margin: 0 auto;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border: 1px solid #059669;
+            border-top: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .notch-speaker {
+            width: 44px;
+            height: 4px;
+            background: #047857;
+            border-radius: 4px;
+        }
+
+        .notch-camera {
+            width: 7px;
+            height: 7px;
+            background: #34d399;
+            border-radius: 50%;
+        }
+
+        /* ==========================================================================
+           ШАПКА ЗАСТОСУНКУ
+           ========================================================================== */
+        .app-header {
+            padding: 16px 28px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .player-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(16, 185, 129, 0.08);
+            padding: 8px 16px 8px 10px;
+            border-radius: 18px;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .player-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #10b981, #047857);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .player-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: #f8fafc;
+        }
+
+        .player-rank {
+            font-size: 11px;
+            font-weight: 700;
+            color: #34d399;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profit-pill {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(4, 120, 87, 0.3));
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            padding: 8px 16px;
+            border-radius: 16px;
+            text-align: right;
+        }
+
+        .profit-label {
+            font-size: 10px;
+            color: #6ee7b7;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .profit-value {
+            font-size: 15px;
+            font-weight: 900;
+            color: #34d399;
+        }
+
+        /* ==========================================================================
+           БЛОК БАЛАНСУ
+           ========================================================================== */
+        .balance-section {
+            padding: 12px 28px 16px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .currency-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6ee7b7;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .balance-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .balance-icon {
+            font-size: 40px;
+            filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.7));
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .balance-number {
+            font-size: 46px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #ffffff 20%, #a7f3d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        /* ==========================================================================
+           КОНТЕЙНЕР ВКЛАДОК
+           ========================================================================== */
+        .screens-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            padding: 0 28px 16px;
+            overflow-y: auto;
+            animation: fadeInScreen 0.25s ease-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeInScreen {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 6px;
+        }
+        .screen::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        .screen::-webkit-scrollbar-thumb {
+            background: #059669;
+            border-radius: 10px;
+        }
+
+        /* ==========================================================================
+           ЕКРАН 1: ГОЛОВНИЙ КЛІКЕР (ЗЕЛЕНИЙ СТИЛЬ)
+           ========================================================================== */
+        .clicker-arena {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .coin-outer-ring {
+            width: 310px;
+            height: 310px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #064e3b, #022c22);
+            padding: 16px;
+            box-shadow: 
+                0 0 60px rgba(16, 185, 129, 0.35),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2),
+                0 20px 40px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.08s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .coin-outer-ring:hover {
+            box-shadow: 
+                0 0 75px rgba(52, 211, 153, 0.5),
+                inset 0 2px 8px rgba(255, 255, 255, 0.3),
+                0 20px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .coin-inner-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #065f46 0%, #064e3b 65%, #022c22 100%);
+            border: 4px solid #34d399;
+            box-shadow: 
+                inset 0 10px 25px rgba(0, 0, 0, 0.7),
+                0 0 25px rgba(16, 185, 129, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coin-inner-circle::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 40%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 60%
+            );
+            pointer-events: none;
+        }
+
+        .hamster-svg-box {
+            width: 225px;
+            height: 225px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.6));
+            transition: transform 0.1s ease;
+        }
+
+        .skin-caption {
+            margin-top: 22px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #a7f3d0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skin-caption span {
+            color: #34d399;
+        }
+
+        .floating-plus {
+            position: fixed;
+            font-size: 30px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 
+                0 0 12px rgba(52, 211, 153, 0.9),
+                0 3px 6px rgba(0, 0, 0, 0.9);
+            pointer-events: none;
+            z-index: 999;
+            animation: floatUpAndFade 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes floatUpAndFade {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.7); }
+            30% { opacity: 1; transform: translate(-50%, -95%) scale(1.15); }
+            100% { opacity: 0; transform: translate(-50%, -175%) scale(0.95); }
+        }
+
+        /* ==========================================================================
+           ВІДРИЖКА КОЖНІ 10 КЛІКІВ
+           ========================================================================== */
+        .hamster-svg-box.burp {
+            animation: burpAnim 0.6s ease;
+        }
+
+        @keyframes burpAnim {
+            0%   { transform: scale(1, 1); }
+            25%  { transform: scale(1.18, 0.86); }
+            50%  { transform: scale(0.9, 1.14); }
+            75%  { transform: scale(1.06, 0.96); }
+            100% { transform: scale(1, 1); }
+        }
+
+        .floating-plus.burp-text {
+            color: #bef264;
+            font-size: 34px;
+            text-shadow: 0 0 14px rgba(163, 230, 53, 0.9), 0 3px 6px rgba(0, 0, 0, 0.9);
+        }
+
+        /* ==========================================================================
+           КНОПКА СКИДАННЯ АКАУНТА
+           ========================================================================== */
+        .btn-reset {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 10px 16px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.2s ease;
+        }
+
+        .btn-reset:hover { background: rgba(239, 68, 68, 0.25); }
+        .btn-reset:active { transform: scale(0.95); }
+
+        .btn-reset.confirm {
+            background: #dc2626;
+            border-color: #fecaca;
+            color: #ffffff;
+        }
+
+        /* ==========================================================================
+           ЗАГОЛОВКИ РОЗДІЛІВ
+           ========================================================================== */
+        .section-header {
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #f8fafc;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: #6ee7b7;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           ЕКРАН 2: СКІНИ (СІТКА 3 СТОВПЧКИ ДЛЯ ДЕСКТОПУ)
+           ========================================================================== */
+        .skins-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            padding-bottom: 12px;
+        }
+
+        .skin-card {
+            background: linear-gradient(180deg, #0d2b1b 0%, #071910 100%);
+            border: 1.5px solid #065f46;
+            border-radius: 20px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .skin-card.equipped {
+            border-color: #34d399;
+            background: linear-gradient(180deg, #113823 0%, #082214 100%);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.25);
+        }
+
+        .skin-preview {
+            width: 74px;
+            height: 74px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skin-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 3px;
+        }
+
+        .skin-bonus {
+            font-size: 10px;
+            font-weight: 700;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.1s ease, filter 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-action:active { transform: scale(0.95); }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-buy:hover { filter: brightness(1.1); }
+
+        .btn-select {
+            background: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-equipped {
+            background: rgba(16, 185, 129, 0.25);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            cursor: default;
+        }
+
+        /* ==========================================================================
+           ЕКРАН 3: ВАЛЮТА (ФІАТ + КРИПТО)
+           ========================================================================== */
+        .currency-types-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .currency-type-card {
+            background: #0a2617;
+            border: 1.5px solid #065f46;
+            border-radius: 16px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .currency-type-card:hover { border-color: #34d399; }
+
+        .currency-type-card.active {
+            border-color: #34d399;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.15));
+            box-shadow: 0 0 18px rgba(52, 211, 153, 0.25);
+        }
+
+        .ctype-icon { font-size: 26px; }
+
+        .ctype-info { display: flex; flex-direction: column; }
+
+        .ctype-name { font-size: 13px; font-weight: 800; color: #f8fafc; }
+
+        .ctype-status { font-size: 10px; font-weight: 700; color: #6ee7b7; }
+
+        .currency-type-card.active .ctype-status { color: #34d399; }
+
+        /* ==========================================================================
+           ЕКРАН 4: ТАБЛИЦЯ ЛІДЕРІВ
+           ========================================================================== */
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-bottom: 12px;
+        }
+
+        .leader-row {
+            background: #0a2617;
+            border: 1px solid #065f46;
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s ease;
+        }
+
+        .leader-row.is-user {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.3), rgba(5, 150, 105, 0.15));
+            border: 1.5px solid #34d399;
+            box-shadow: 0 0 18px rgba(52, 211, 153, 0.25);
+        }
+
+        .leader-left { display: flex; align-items: center; gap: 12px; }
+
+        .leader-rank { width: 28px; text-align: center; font-size: 15px; font-weight: 900; color: #6ee7b7; }
+
+        .leader-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: #064e3b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .leader-name-box { display: flex; flex-direction: column; }
+
+        .leader-name { font-size: 14px; font-weight: 800; color: #f8fafc; }
+
+        .leader-row.is-user .leader-name { color: #34d399; }
+
+        .leader-league { font-size: 11px; color: #6ee7b7; font-weight: 700; }
+
+        .leader-score { font-size: 15px; font-weight: 900; color: #e2e8f0; display: flex; align-items: center; gap: 5px; }
+
+        /* ==========================================================================
+           НИЖНЯ ДЕСКТОПНА НАВІГАЦІЯ
+           ========================================================================== */
+        .bottom-nav {
+            background: #05160d;
+            border-top: 1px solid #065f46;
+            padding: 12px 20px 16px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            padding: 10px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            color: #6ee7b7;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover { color: #ffffff; background: rgba(16, 185, 129, 0.08); }
+
+        .nav-item.active {
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.08));
+            border-color: rgba(52, 211, 153, 0.5);
+            color: #34d399;
+        }
+
+        .nav-icon { font-size: 22px; line-height: 1; }
+
+        .nav-label { font-size: 12px; font-weight: 800; }
+
+        /* ==========================================================================
+           TOAST ПОВІДОМЛЕННЯ
+           ========================================================================== */
+        .toast-banner {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: #064e3b;
+            border: 1.5px solid #34d399;
+            color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .toast-banner.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Десктопний широкий контейнер -->
+    <div class="app-frame" id="appFrame">
+        <!-- Чубчок -->
+        <div class="phone-notch">
+            <div class="notch-speaker"></div>
+            <div class="notch-camera"></div>
+        </div>
+
+        <!-- Сповіщення -->
+        <div class="toast-banner" id="toastBanner">Повідомлення</div>
+
+        <!-- Шапка -->
+        <header class="app-header">
+            <div class="player-badge">
+                <div class="player-avatar" id="headerAvatar">🐹</div>
+                <div class="player-info">
+                    <span class="player-name">CEO Хом'як (Ти)</span>
+                    <span class="player-rank" id="playerLeague">Ліга: Новачок</span>
+                </div>
+            </div>
+
+            <button class="btn-reset" id="resetBtn">🔄 Почати з нуля</button>
+
+            <div class="profit-pill">
+                <div class="profit-label">Прибуток за клік</div>
+                <div class="profit-value" id="profitPerClickDisplay">+1</div>
+            </div>
+        </header>
+
+        <!-- Баланс -->
+        <section class="balance-section">
+            <div class="currency-title" id="currencyNameDisplay">БАЛАНС: ГРИВНІ</div>
+            <div class="balance-display">
+                <span class="balance-icon" id="currencyIconDisplay">₴</span>
+                <span class="balance-number" id="balanceNumberDisplay">0</span>
+            </div>
+        </section>
+
+        <!-- Контейнер екранів -->
+        <main class="screens-wrapper">
+
+            <!-- ВКЛАДКА 1: КЛІКЕР -->
+            <div class="screen active" id="screen-clicker">
+                <div class="clicker-arena">
+                    <div class="coin-outer-ring" id="hamsterBtn">
+                        <div class="coin-inner-circle" id="coinInnerCircle">
+                            <div class="hamster-svg-box" id="mainHamsterSvg">
+                                <!-- Рендериться через JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skin-caption">
+                        Активний образ: <span id="activeSkinName">Звичайний Хом'як</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 2: СКІНИ (10+ СКІНІВ) -->
+            <div class="screen" id="screen-skins">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Розширений Гардероб (10+ Скінів)</div>
+                        <div class="section-subtitle">Обирай легендарні образи та прискорюй заробіток</div>
+                    </div>
+                </div>
+                <div class="skins-grid" id="skinsContainer">
+                    <!-- Генерація через JS -->
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 3: ВАЛЮТА (ФІАТ + КРИПТО) -->
+            <div class="screen" id="screen-currency">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Вибір валюти (Фіат & Крипто)</div>
+                        <div class="section-subtitle">Перемикайся між гривнями, доларами, євро та монетами</div>
+                    </div>
+                </div>
+                <div class="currency-types-grid" id="currencyTypesContainer">
+                    <!-- Генерація через JS -->
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 4: ТАБЛИЦЯ ЛІДЕРІВ -->
+            <div class="screen" id="screen-leaders">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Таблиця лідерів</div>
+                        <div class="section-subtitle">Глобальний рейтинг інвесторів хом'яка</div>
+                    </div>
+                </div>
+                <div class="leaderboard-list" id="leaderboardContainer">
+                    <!-- Генерація через JS -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Навігація -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="clicker">
+                <span class="nav-icon">🐹</span>
+                <span class="nav-label">Клікер</span>
+            </button>
+            <button class="nav-item" data-tab="skins">
+                <span class="nav-icon">👕</span>
+                <span class="nav-label">Скіни (10+)</span>
+            </button>
+            <button class="nav-item" data-tab="currency">
+                <span class="nav-icon">💶</span>
+                <span class="nav-label">Валюта</span>
+            </button>
+            <button class="nav-item" data-tab="leaders">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-label">Лідери</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           БАЗИ ДАНИХ (10+ СКІНІВ ТА ФІАТНІ/КРИПТОВАЛЮТИ)
+           ========================================================================== */
+
+        const HAMSTER_SVGS = {
+            classic: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <circle cx="52" cy="54" r="24" fill="#d97706" stroke="#451a03" stroke-width="4"/>
+                    <circle cx="52" cy="54" r="13" fill="#fcd9b6"/>
+                    <circle cx="148" cy="54" r="24" fill="#d97706" stroke="#451a03" stroke-width="4"/>
+                    <circle cx="148" cy="54" r="13" fill="#fcd9b6"/>
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#f59e0b" stroke="#451a03" stroke-width="4"/>
+                    <ellipse cx="64" cy="122" rx="24" ry="19" fill="#fff7ed"/>
+                    <ellipse cx="136" cy="122" rx="24" ry="19" fill="#fff7ed"/>
+                    <ellipse cx="100" cy="145" rx="38" ry="26" fill="#fff7ed"/>
+                    <circle cx="74" cy="94" r="11" fill="#451a03"/>
+                    <circle cx="71" cy="90" r="4" fill="#ffffff"/>
+                    <circle cx="126" cy="94" r="11" fill="#451a03"/>
+                    <circle cx="123" cy="90" r="4" fill="#ffffff"/>
+                    <ellipse cx="100" cy="112" rx="8" ry="6" fill="#b45309"/>
+                    <path d="M 88 123 Q 100 133 100 121 Q 100 133 112 123" fill="none" stroke="#451a03" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+            `,
+            cyber: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <circle cx="52" cy="54" r="23" fill="#064e3b" stroke="#34d399" stroke-width="4"/>
+                    <circle cx="148" cy="54" r="23" fill="#064e3b" stroke="#34d399" stroke-width="4"/>
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#047857" stroke="#34d399" stroke-width="4"/>
+                    <rect x="44" y="78" width="112" height="28" rx="12" fill="#10b981" stroke="#ffffff" stroke-width="2.5"/>
+                    <polygon points="100,112 93,120 107,120" fill="#34d399"/>
+                    <path d="M 85 132 L 94 138 L 106 138 L 115 132" fill="none" stroke="#34d399" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+            `,
+            ninja: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <circle cx="52" cy="54" r="23" fill="#022c22" stroke="#10b981" stroke-width="4"/>
+                    <circle cx="148" cy="54" r="23" fill="#022c22" stroke="#10b981" stroke-width="4"/>
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#022c22" stroke="#10b981" stroke-width="4"/>
+                    <path d="M 38 76 Q 100 66 162 76 L 164 90 Q 100 80 36 90 Z" fill="#059669"/>
+                    <rect x="48" y="88" width="104" height="24" rx="12" fill="#a7f3d0"/>
+                    <circle cx="74" cy="100" r="8" fill="#022c22"/>
+                    <circle cx="126" cy="100" r="8" fill="#022c22"/>
+                </svg>
+            `,
+            gold: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <circle cx="52" cy="56" r="23" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+                    <circle cx="148" cy="56" r="23" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+                    <ellipse cx="100" cy="114" rx="68" ry="63" fill="#fbbf24" stroke="#78350f" stroke-width="4"/>
+                    <polygon points="68,52 76,26 92,42 100,18 108,42 124,26 132,52" fill="#fde047" stroke="#b45309" stroke-width="3"/>
+                    <rect x="48" y="84" width="46" height="24" rx="8" fill="#0f172a" stroke="#fde047" stroke-width="2.5"/>
+                    <rect x="106" y="84" width="46" height="24" rx="8" fill="#0f172a" stroke="#fde047" stroke-width="2.5"/>
+                </svg>
+            `,
+            matrix: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <circle cx="52" cy="54" r="24" fill="#022c22" stroke="#34d399" stroke-width="4"/>
+                    <circle cx="148" cy="54" r="24" fill="#022c22" stroke="#34d399" stroke-width="4"/>
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#065f46" stroke="#34d399" stroke-width="4"/>
+                    <rect x="44" y="80" width="112" height="26" rx="10" fill="#000000" stroke="#34d399" stroke-width="3"/>
+                    <text x="54" y="98" fill="#34d399" font-family="monospace" font-size="14" font-weight="bold">10101</text>
+                    <ellipse cx="100" cy="116" rx="7" ry="5" fill="#34d399"/>
+                </svg>
+            `,
+            kingpop: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#10b981" stroke="#022c22" stroke-width="4"/>
+                    <path d="M 50 64 L 150 64 L 140 40 L 60 40 Z" fill="#111827"/>
+                    <rect x="65" y="30" width="70" height="14" fill="#111827"/>
+                    <rect x="55" y="58" width="90" height="6" fill="#ef4444"/>
+                    <circle cx="74" cy="94" r="9" fill="#111827"/>
+                    <circle cx="126" cy="94" r="9" fill="#111827"/>
+                </svg>
+            `,
+            samurai: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#047857" stroke="#b91c1c" stroke-width="4"/>
+                    <path d="M 40 70 Q 100 45 160 70 L 150 50 L 50 50 Z" fill="#b91c1c"/>
+                    <circle cx="100" cy="58" r="8" fill="#fbbf24"/>
+                    <circle cx="74" cy="96" r="10" fill="#111827"/>
+                    <circle cx="126" cy="96" r="10" fill="#111827"/>
+                </svg>
+            `,
+            neonrider: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#0f172a" stroke="#38bdf8" stroke-width="4"/>
+                    <path d="M 50 78 L 150 78 L 130 96 L 70 96 Z" fill="#38bdf8"/>
+                    <circle cx="74" cy="110" r="9" fill="#38bdf8"/>
+                    <circle cx="126" cy="110" r="9" fill="#38bdf8"/>
+                </svg>
+            `,
+            diamond: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#38bdf8" stroke="#ffffff" stroke-width="4"/>
+                    <polygon points="100,35 125,55 100,75 75,55" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+                    <circle cx="74" cy="96" r="10" fill="#0f172a"/>
+                    <circle cx="126" cy="96" r="10" fill="#0f172a"/>
+                </svg>
+            `,
+            galactic: `
+                <svg viewBox="0 0 200 200" width="100%" height="100%">
+                    <ellipse cx="100" cy="112" rx="68" ry="64" fill="#7c3aed" stroke="#c084fc" stroke-width="4"/>
+                    <ellipse cx="100" cy="112" rx="85" ry="24" fill="none" stroke="#f43f5e" stroke-width="5" transform="rotate(-15 100 112)"/>
+                    <circle cx="74" cy="96" r="9" fill="#ffffff"/>
+                    <circle cx="126" cy="96" r="9" fill="#ffffff"/>
+                </svg>
+            `
+        };
+
+        const SKINS_DATA = [
+            { id: 'classic', name: 'Звичайний Хом\'як', price: 0, bonus: 1 },
+            { id: 'cyber', name: 'Кібер-Хом\'як', price: 150, bonus: 2 },
+            { id: 'ninja', name: 'Хом\'як-Ніндзя', price: 500, bonus: 4 },
+            { id: 'gold', name: 'Золотий Бос', price: 1500, bonus: 8 },
+            { id: 'matrix', name: 'Матрикс Хакер', price: 3500, bonus: 14 },
+            { id: 'kingpop', name: 'Король Поп-Сцени', price: 7000, bonus: 22 },
+            { id: 'samurai', name: 'Самурай Хамстер', price: 12000, bonus: 35 },
+            { id: 'neonrider', name: 'Неоновий Райдер', price: 20000, bonus: 50 },
+            { id: 'diamond', name: 'Діамантові Лапки', price: 35000, bonus: 75 },
+            { id: 'galactic', name: 'Галактичний Бос', price: 60000, bonus: 110 }
+        ];
+
+        // Фіатні валюти + крипта
+        const CURRENCIES_DATA = [
+            { id: 'uah', name: 'Гривні', icon: '₴' },
+            { id: 'usd', name: 'Долари', icon: '$' },
+            { id: 'eur', name: 'Євро', icon: '€' },
+            { id: 'gbp', name: 'Фунти', icon: '£' },
+            { id: 'pln', name: 'Злоті', icon: 'zł' },
+            { id: 'btc', name: 'Біткоїн', icon: '₿' }
+        ];
+
+        const RIVALS_DATA = [
+            { name: 'KyivCryptoWhale', avatar: '🦁', score: 45000, league: 'Легенда' },
+            { name: 'LvivTrader', avatar: '☕', score: 28000, league: 'Майстер' },
+            { name: 'OdesaBoss', avatar: '⚓', score: 16500, league: 'Діамант' },
+            { name: 'KharkivHacker', avatar: '💻', score: 8900, league: 'Платина' },
+            { name: 'DniproInvestor', avatar: '🏭', score: 4200, league: 'Золото' },
+            { name: 'CryptoPaws', avatar: '🐾', score: 1250, league: 'Срібло' },
+            { name: 'StarterTapper', avatar: '🐹', score: 300, league: 'Бронза' }
+        ];
+
+        /* ==========================================================================
+           СТАН ГРИ ТА LOCALSTORAGE
+           ========================================================================== */
+        const STORAGE_KEY = 'hamster_desktop_green_save_v1';
+
+        let gameState = {
+            balance: 0,
+            ownedSkins: ['classic'],
+            selectedSkin: 'classic',
+            selectedCurrency: 'uah'
+        };
+
+        function loadGameState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    gameState = {
+                        balance: typeof parsed.balance === 'number' ? parsed.balance : 0,
+                        ownedSkins: Array.isArray(parsed.ownedSkins) && parsed.ownedSkins.length > 0 ? parsed.ownedSkins : ['classic'],
+                        selectedSkin: parsed.selectedSkin || 'classic',
+                        selectedCurrency: parsed.selectedCurrency || 'uah'
+                    };
+                }
+            } catch (e) {
+                console.warn('Помилка завантаження збереження:', e);
+            }
+        }
+
+        function saveGameState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+            } catch (e) {
+                console.warn('Помилка збереження:', e);
+            }
+        }
+
+        function getCurrentSkin() {
+            return SKINS_DATA.find(s => s.id === gameState.selectedSkin) || SKINS_DATA[0];
+        }
+
+        function getCurrentCurrency() {
+            return CURRENCIES_DATA.find(c => c.id === gameState.selectedCurrency) || CURRENCIES_DATA[0];
+        }
+
+        function getClickPower() {
+            return getCurrentSkin().bonus;
+        }
+
+        function getLeagueName(score) {
+            if (score >= 40000) return 'Легенда';
+            if (score >= 20000) return 'Майстер';
+            if (score >= 10000) return 'Діамант';
+            if (score >= 5000) return 'Платина';
+            if (score >= 2000) return 'Золото';
+            if (score >= 500) return 'Срібло';
+            return 'Новачок';
+        }
+
+        /* ==========================================================================
+           TOAST ПОВІДОМЛЕННЯ
+           ========================================================================== */
+        let toastTimeout = null;
+        function showToast(message) {
+            const toast = document.getElementById('toastBanner');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        /* ==========================================================================
+           РЕНДЕР ІНТЕРФЕЙСУ
+           ========================================================================== */
+        function updateHeaderAndBalance() {
+            const currency = getCurrentCurrency();
+            const skin = getCurrentSkin();
+            const power = getClickPower();
+
+            document.getElementById('currencyNameDisplay').textContent = `БАЛАНС: ${currency.name.toUpperCase()}`;
+            document.getElementById('currencyIconDisplay').textContent = currency.icon;
+            document.getElementById('balanceNumberDisplay').textContent = gameState.balance.toLocaleString('uk-UA');
+            document.getElementById('profitPerClickDisplay').textContent = `+${power} ${currency.icon}`;
+            document.getElementById('playerLeague').textContent = `Ліга: ${getLeagueName(gameState.balance)}`;
+            document.getElementById('activeSkinName').textContent = skin.name;
+            document.getElementById('mainHamsterSvg').innerHTML = HAMSTER_SVGS[skin.id] || HAMSTER_SVGS.classic;
+        }
+
+        function renderSkinsTab() {
+            const container = document.getElementById('skinsContainer');
+            const currency = getCurrentCurrency();
+            container.innerHTML = '';
+
+            SKINS_DATA.forEach(skin => {
+                const isOwned = gameState.ownedSkins.includes(skin.id);
+                const isEquipped = gameState.selectedSkin === skin.id;
+
+                const card = document.createElement('div');
+                card.className = `skin-card ${isEquipped ? 'equipped' : ''}`;
+
+                let buttonHtml = '';
+                if (isEquipped) {
+                    buttonHtml = `<button class="btn-action btn-equipped" disabled>✓ Обрано</button>`;
+                } else if (isOwned) {
+                    buttonHtml = `<button class="btn-action btn-select" onclick="selectSkin('${skin.id}')">Одягнути</button>`;
+                } else {
+                    buttonHtml = `<button class="btn-action btn-buy" onclick="buySkin('${skin.id}')">${currency.icon} ${skin.price.toLocaleString('uk-UA')}</button>`;
+                }
+
+                card.innerHTML = `
+                    <div class="skin-preview">${HAMSTER_SVGS[skin.id] || HAMSTER_SVGS.classic}</div>
+                    <div class="skin-name">${skin.name}</div>
+                    <div class="skin-bonus">+${skin.bonus} клік</div>
+                    ${buttonHtml}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderCurrencyTab() {
+            const typesContainer = document.getElementById('currencyTypesContainer');
+
+            typesContainer.innerHTML = '';
+            CURRENCIES_DATA.forEach(curr => {
+                const isActive = curr.id === gameState.selectedCurrency;
+                const card = document.createElement('div');
+                card.className = `currency-type-card ${isActive ? 'active' : ''}`;
+                card.onclick = () => selectCurrencyType(curr.id);
+
+                card.innerHTML = `
+                    <div class="ctype-icon">${curr.icon}</div>
+                    <div class="ctype-info">
+                        <span class="ctype-name">${curr.name}</span>
+                        <span class="ctype-status">${isActive ? 'Активна валюта' : 'Обрати'}</span>
+                    </div>
+                `;
+                typesContainer.appendChild(card);
+            });
+        }
+
+        function renderLeaderboardTab() {
+            const container = document.getElementById('leaderboardContainer');
+            const currency = getCurrentCurrency();
+            container.innerHTML = '';
+
+            const allPlayers = [
+                ...RIVALS_DATA.map(r => ({ ...r, isUser: false })),
+                {
+                    name: 'Ти (CEO Хом\'як)',
+                    avatar: '🐹',
+                    score: gameState.balance,
+                    league: getLeagueName(gameState.balance),
+                    isUser: true
+                }
+            ];
+
+            allPlayers.sort((a, b) => b.score - a.score);
+
+            allPlayers.forEach((player, index) => {
+                const place = index + 1;
+                let rankBadge = `#${place}`;
+                if (place === 1) rankBadge = '🥇';
+                else if (place === 2) rankBadge = '🥈';
+                else if (place === 3) rankBadge = '🥉';
+
+                const row = document.createElement('div');
+                row.className = `leader-row ${player.isUser ? 'is-user' : ''}`;
+                row.innerHTML = `
+                    <div class="leader-left">
+                        <div class="leader-rank">${rankBadge}</div>
+                        <div class="leader-avatar">${player.avatar}</div>
+                        <div class="leader-name-box">
+                            <span class="leader-name">${player.name}</span>
+                            <span class="leader-league">${player.league}</span>
+                        </div>
+                    </div>
+                    <div class="leader-score">
+                        <span>${player.score.toLocaleString('uk-UA')}</span>
+                        <span>${currency.icon}</span>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function renderAll() {
+            updateHeaderAndBalance();
+            renderSkinsTab();
+            renderCurrencyTab();
+            renderLeaderboardTab();
+        }
+
+        /* ==========================================================================
+           ІГРОВІ ДІЇ ТА ЛОГІКА
+           ========================================================================== */
+        window.buySkin = function(skinId) {
+            const skin = SKINS_DATA.find(s => s.id === skinId);
+            const currency = getCurrentCurrency();
+            if (!skin) return;
+
+            if (gameState.ownedSkins.includes(skinId)) {
+                selectSkin(skinId);
+                return;
+            }
+
+            if (gameState.balance >= skin.price) {
+                gameState.balance -= skin.price;
+                gameState.ownedSkins.push(skinId);
+                gameState.selectedSkin = skinId;
+                saveGameState();
+                renderAll();
+                showToast(`🎉 Куплено: ${skin.name}!`);
+            } else {
+                const needed = skin.price - gameState.balance;
+                showToast(`❌ Не вистачає ${needed.toLocaleString('uk-UA')} ${currency.icon}`);
+            }
+        };
+
+        window.selectSkin = function(skinId) {
+            if (!gameState.ownedSkins.includes(skinId)) return;
+            gameState.selectedSkin = skinId;
+            const skin = getCurrentSkin();
+            saveGameState();
+            renderAll();
+            showToast(`✨ Обрано образ: ${skin.name}`);
+        };
+
+        window.selectCurrencyType = function(currencyId) {
+            gameState.selectedCurrency = currencyId;
+            const curr = getCurrentCurrency();
+            saveGameState();
+            renderAll();
+            showToast(`💱 Валюту змінено на: ${curr.name} (${curr.icon})`);
+        };
+
+        /* ==========================================================================
+           ВІДРИЖКА КОЖНІ 10 КЛІКІВ
+           ========================================================================== */
+        let clickCounter = 0;
+
+        function triggerBurp() {
+            const box = document.getElementById('mainHamsterSvg');
+            box.classList.remove('burp');
+            void box.offsetWidth; // перезапуск анімації
+            box.classList.add('burp');
+            setTimeout(() => box.classList.remove('burp'), 650);
+
+            const rect = box.getBoundingClientRect();
+            const el = document.createElement('div');
+            el.className = 'floating-plus burp-text';
+            el.textContent = 'Ригь! 💨';
+            el.style.left = `${rect.left + rect.width / 2}px`;
+            el.style.top = `${rect.top + rect.height * 0.7}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 850);
+
+            showToast('🤢 Хом\'як відригнув!');
+        }
+
+        function setupClickerInteraction() {
+            const hamsterBtn = document.getElementById('hamsterBtn');
+
+            function handleTap(clientX, clientY) {
+                const gain = getClickPower();
+                const currency = getCurrentCurrency();
+
+                gameState.balance += gain;
+                saveGameState();
+                updateHeaderAndBalance();
+
+                const rect = hamsterBtn.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const deltaX = (clientX - centerX) / (rect.width / 2);
+                const deltaY = (clientY - centerY) / (rect.height / 2);
+
+                const rotateY = deltaX * 14;
+                const rotateX = -deltaY * 14;
+
+                hamsterBtn.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(0.94)`;
+                setTimeout(() => {
+                    hamsterBtn.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
+                }, 95);
+
+                spawnFloatingText(clientX, clientY, `+${gain} ${currency.icon}`);
+
+                clickCounter++;
+                if (clickCounter % 10 === 0) triggerBurp();
+            }
+
+            hamsterBtn.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                handleTap(e.clientX, e.clientY);
+            });
+        }
+
+        function spawnFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-plus';
+            el.textContent = text;
+
+            const randomOffset = (Math.random() - 0.5) * 26;
+            el.style.left = `${x + randomOffset}px`;
+            el.style.top = `${y - 12}px`;
+
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 850);
+        }
+
+        /* ==========================================================================
+           СКИДАННЯ АКАУНТА З НУЛЯ (ПОДВІЙНЕ ПІДТВЕРДЖЕННЯ)
+           ========================================================================== */
+        function setupResetButton() {
+            const btn = document.getElementById('resetBtn');
+            const defaultText = '🔄 Почати з нуля';
+            let confirmTimeout = null;
+
+            function cancelConfirm() {
+                btn.classList.remove('confirm');
+                btn.textContent = defaultText;
+            }
+
+            btn.addEventListener('click', () => {
+                if (!btn.classList.contains('confirm')) {
+                    btn.classList.add('confirm');
+                    btn.textContent = '⚠️ Точно? Натисни ще раз';
+                    clearTimeout(confirmTimeout);
+                    confirmTimeout = setTimeout(cancelConfirm, 3000);
+                    return;
+                }
+
+                clearTimeout(confirmTimeout);
+                cancelConfirm();
+
+                gameState = {
+                    balance: 0,
+                    ownedSkins: ['classic'],
+                    selectedSkin: 'classic',
+                    selectedCurrency: 'uah'
+                };
+                clickCounter = 0;
+                saveGameState();
+                renderAll();
+                showToast('🔄 Акаунт скинуто! Починаємо з нуля');
+            });
+        }
+
+        function setupNavigation() {
+            const navButtons = document.querySelectorAll('.nav-item');
+            const screens = document.querySelectorAll('.screen');
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.getAttribute('data-tab');
+
+                    navButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    screens.forEach(s => s.classList.remove('active'));
+                    const targetScreen = document.getElementById(`screen-${targetTab}`);
+                    if (targetScreen) targetScreen.classList.add('active');
+
+                    if (targetTab === 'leaders') renderLeaderboardTab();
+                    if (targetTab === 'skins') renderSkinsTab();
+                    if (targetTab === 'currency') renderCurrencyTab();
+                });
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGameState();
+            renderAll();
+            setupClickerInteraction();
+            setupResetButton();
+            setupNavigation();
+        });
+    </script>
+</body>
+</html>
